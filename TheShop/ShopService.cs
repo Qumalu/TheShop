@@ -6,16 +6,16 @@ namespace TheShop
 	public class ShopService
 	{
 		private readonly ILogger _logger;
-		private DatabaseDriver _databaseDriver;		
+		private readonly IDatabaseDriver _databaseDriver;
 
 		private Supplier1 _supplier1;
 		private Supplier2 _supplier2;
 		private Supplier3 _supplier3;
 		
-		public ShopService(ILogger logger = null)
+		public ShopService(ILogger logger = null, IDatabaseDriver databaseDriver = null)
 		{
 			_logger = logger ?? new Logger();
-			_databaseDriver = new DatabaseDriver();			
+			_databaseDriver = databaseDriver ?? new DatabaseDriver();
 			_supplier1 = new Supplier1();
 			_supplier2 = new Supplier2();
 			_supplier3 = new Supplier3();
