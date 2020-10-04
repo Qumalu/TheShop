@@ -36,7 +36,7 @@ namespace TheShop
 			#region selling article
 
 			if (article == null)
-				throw new Exception("Could not order article");
+				throw new ArgumentNullException("Could not order article");
 
 
 			_logger.Log(LogMessageType.Debug, "Trying to sell article with id=" + id);
@@ -50,14 +50,11 @@ namespace TheShop
 				_databaseDriver.Save(article);
 				_logger.Log(LogMessageType.Info, "Article with id=" + id + " is sold.");
 			}
-			catch (ArgumentNullException ex)
+			catch (Exception ex)
 			{
 				_logger.Log(LogMessageType.Error, "Could not save article with id=" + id);
-				throw new Exception("Could not save article with id" + ex);
-			}
-			catch (Exception)
-			{
-			}
+				throw new Exception("Could not save article with id=" + id + ex);
+			}			
 
 			#endregion
 		}
