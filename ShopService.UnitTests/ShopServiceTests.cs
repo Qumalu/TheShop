@@ -30,6 +30,22 @@ namespace TheShop.UnitTests
             Assert.That(() => _shopService.OrderAndSellArticle(id, maxExpectedPrice, buyerId), Throws.Exception);
         }
 
+        [Test]
+        public void GetById_WhenCalled_ReturnArticleObject()
+        {
+            var result = _shopService.GetById(1);
+
+            Assert.That(result, Is.TypeOf<Article>());
+        }
+
+        [Test]
+        public void GetById_WhenCalled_ReturnNull()
+        {
+            var result = _shopService.GetById(0);
+
+            Assert.That(result, Is.Null);
+        }
+
 
     }
 }
