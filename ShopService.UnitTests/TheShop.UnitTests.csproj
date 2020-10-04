@@ -57,6 +57,7 @@
     <Compile Include="FakeDatabaseDriver.cs" />
     <Compile Include="FakeSupplier.cs" />
     <Compile Include="FakeSupplier2.cs" />
+    <Compile Include="LogerTest.cs" />
     <Compile Include="ShopServiceTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
