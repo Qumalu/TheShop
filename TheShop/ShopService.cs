@@ -5,17 +5,17 @@ namespace TheShop
 {
 	public class ShopService
 	{
-		private DatabaseDriver _databaseDriver;
-		private Logger _logger;
+		private readonly ILogger _logger;
+		private DatabaseDriver _databaseDriver;		
 
 		private Supplier1 _supplier1;
 		private Supplier2 _supplier2;
 		private Supplier3 _supplier3;
 		
-		public ShopService()
+		public ShopService(ILogger logger = null)
 		{
-			_databaseDriver = new DatabaseDriver();
-			_logger = new Logger();
+			_logger = logger ?? new Logger();
+			_databaseDriver = new DatabaseDriver();			
 			_supplier1 = new Supplier1();
 			_supplier2 = new Supplier2();
 			_supplier3 = new Supplier3();
@@ -59,25 +59,24 @@ namespace TheShop
 			#region selling article
 
 			if (article == null)
-			{
 				throw new Exception("Could not order article");
-			}
 
-			_logger.Debug("Trying to sell article with id=" + id);
+
+			_logger.Log(LogMessageType.Debug, "Trying to sell article with id=" + id);
 
 			article.IsSold = true;
 			article.SoldDate = DateTime.Now;
 			article.BuyerUserId = buyerId;
-			
+
 			try
 			{
 				_databaseDriver.Save(article);
-				_logger.Info("Article with id=" + id + " is sold.");
+				_logger.Log(LogMessageType.Info, "Article with id=" + id + " is sold.");
 			}
 			catch (ArgumentNullException ex)
 			{
-				_logger.Error("Could not save article with id=" + id);
-				throw new Exception("Could not save article with id");
+				_logger.Log(LogMessageType.Error, "Could not save article with id=" + id);
+				throw new Exception("Could not save article with id" + ex);
 			}
 			catch (Exception)
 			{

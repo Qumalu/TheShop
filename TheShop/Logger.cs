@@ -2,21 +2,14 @@
 
 namespace TheShop
 {
-    public class Logger
+	public class Logger : ILogger
 	{
-		public void Info(string message)
+		public void Log(LogMessageType logMessageType, string message)
 		{
-			Console.WriteLine("Info: " + message);
-		}
+			if (string.IsNullOrWhiteSpace(message))
+				throw new ArgumentNullException("Message can not be empty!");
 
-		public void Error(string message)
-		{
-			Console.WriteLine("Error: " + message);
-		}
-
-		public void Debug(string message)
-		{
-			Console.WriteLine("Debug: " + message);
+			Console.WriteLine(logMessageType.ToString() + ": " + message);
 		}
 	}
 
