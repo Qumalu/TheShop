@@ -1,11 +1,8 @@
 ﻿namespace TheShop
 {
-	public class Supplier1
+	public class Supplier1 : ISupplier
 	{
-		public bool ArticleInInventory(int id)
-		{
-			return true;
-		}
+		public bool ArticleInInventory(int id) => true;		
 
 		public Article GetArticle(int id)
 		{

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace TheShop
 {
@@ -7,53 +8,29 @@ namespace TheShop
 	{
 		private readonly ILogger _logger;
 		private readonly IDatabaseDriver _databaseDriver;
+		private readonly IList<ISupplier> _suppliers;
 
-		private Supplier1 _supplier1;
-		private Supplier2 _supplier2;
-		private Supplier3 _supplier3;
-		
-		public ShopService(ILogger logger = null, IDatabaseDriver databaseDriver = null)
+		public ShopService(ILogger logger = null, IDatabaseDriver databaseDriver = null, IList<ISupplier> suppliers = null)
 		{
 			_logger = logger ?? new Logger();
 			_databaseDriver = databaseDriver ?? new DatabaseDriver();
-			_supplier1 = new Supplier1();
-			_supplier2 = new Supplier2();
-			_supplier3 = new Supplier3();
+			_suppliers = suppliers ?? _databaseDriver.GetSuppliers();
 		}
 
 		public void OrderAndSellArticle(int id, int maxExpectedPrice, int buyerId)
 		{
 			#region ordering article
 
-			Article article = null;
-			Article tempArticle = null;
-			var articleExists = _supplier1.ArticleInInventory(id);
-			if (articleExists)
+			var articlesFromSuppliers = new List<Article>();
+
+			foreach (var supplier in _suppliers)
 			{
-				tempArticle = _supplier1.GetArticle(id);
-				if (maxExpectedPrice < tempArticle.ArticlePrice)
-				{
-					articleExists = _supplier2.ArticleInInventory(id);
-					if (articleExists)
-					{
-						tempArticle = _supplier2.GetArticle(id);
-						if (maxExpectedPrice < tempArticle.ArticlePrice)
-						{
-							articleExists = _supplier3.ArticleInInventory(id);
-							if (articleExists)
-							{
-								tempArticle = _supplier3.GetArticle(id);
-								if (maxExpectedPrice < tempArticle.ArticlePrice)
-								{
-									article = tempArticle;
-								}
-							}
-						}
-					}
-				}
+				if (supplier.ArticleInInventory(id))
+					articlesFromSuppliers.Add(supplier.GetArticle(id));
 			}
-			
-			article = tempArticle;
+
+			var article = articlesFromSuppliers.OrderBy(a => a.ArticlePrice).FirstOrDefault(a => a.ArticlePrice <= maxExpectedPrice);
+
 			#endregion
 
 			#region selling article
@@ -85,10 +62,7 @@ namespace TheShop
 			#endregion
 		}
 
-		public Article GetById(int id)
-		{
-			return _databaseDriver.GetById(id);
-		}
+		public Article GetById(int id) => _databaseDriver.GetById(id);	
 	}
 
 }

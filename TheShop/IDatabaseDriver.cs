@@ -5,6 +5,7 @@ namespace TheShop
     public interface IDatabaseDriver
     {
         Article GetById(int id);
-        void Save(Article article);        
+        void Save(Article article);
+        List<ISupplier> GetSuppliers();
     }
 }

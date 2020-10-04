@@ -12,6 +12,7 @@ namespace TheShop
 
 		public void Save(Article article) => _articles.Add(article);
 
+		public List<ISupplier> GetSuppliers() => new List<ISupplier>() { new Supplier1(), new Supplier2(), new Supplier3() };
 	}
 
 }
